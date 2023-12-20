@@ -1,0 +1,10 @@
+create table shipper
+(
+    id              int identity
+        constraint employee_pk
+            primary key,
+    name            nvarchar(400),
+    normalized_name nvarchar(400),
+    phone           varchar(12)
+)
+go
