@@ -1,0 +1,9 @@
+create table product
+(
+    id              int identity
+        primary key,
+    name            nvarchar(400),
+    normalized_name nvarchar(400),
+    quantity        int
+)
+go
