@@ -1,0 +1,12 @@
+create table shipper
+(
+    id              int identity
+        constraint employee_pk
+            primary key,
+    name            nvarchar(400),
+    gender          varchar(8),
+    age             int,
+    normalized_name nvarchar(400),
+    address         nvarchar(400)
+)
+go
