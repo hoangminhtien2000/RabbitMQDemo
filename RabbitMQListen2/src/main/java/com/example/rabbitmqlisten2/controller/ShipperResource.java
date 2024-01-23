@@ -30,10 +30,4 @@ public class ShipperResource {
         ResultDTO resultDTO = shipperService.shipping(request);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
-
-    @PostMapping("/rabbitmq-listen2/shipping-success")
-    public ResponseEntity<ResultDTO> shippingSuccess(@RequestBody ShipperRequest request) {
-        ResultDTO resultDTO = shipperService.shippingSuccess(request);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
 }

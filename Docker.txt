@@ -18,11 +18,5 @@ Mở Web RabbitMQ Management:
 docker exec -it my-rabbit bash : "my-rabbit"-> containers name
 rabbitmq-plugins enable rabbitmq_management
 exit
-(Chạy trên terminal) Đăng nhập bằng http://localhost:15672	TàiKhoản:guest/guest
 
-Chạy dự án:
-B1: Dowload RabbitMQ Server(Nếu Docker chưa có Images của RabbitMQ Server)
-docker pull rabbitmq:3.12.10-management
 
-B2: Chạy docker(khi tắt thì tự động xoá)
-docker run --rm -it -p 15672:15672 -p 5672:5672 rabbitmq:3.12.10-management

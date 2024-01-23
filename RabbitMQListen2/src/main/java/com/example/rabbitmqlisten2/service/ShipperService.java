@@ -5,5 +5,4 @@ import com.example.rabbitmqlisten2.domain.request.ShipperRequest;
 
 public interface ShipperService {
     ResultDTO shipping(ShipperRequest request);
-    ResultDTO shippingSuccess(ShipperRequest request);
 }

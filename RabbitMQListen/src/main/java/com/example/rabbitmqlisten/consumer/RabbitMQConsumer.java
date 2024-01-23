@@ -7,6 +7,7 @@ import com.example.rabbitmqlisten.domain.errors.ExceptionConstants;
 import com.example.rabbitmqlisten.publisher.RabbitMQProducer;
 import com.example.rabbitmqlisten.repository.ProductRepo;
 import com.example.rabbitmqlisten.util.Converter;
+import jakarta.transaction.Transactional;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class RabbitMQConsumer {
         this.productRepo = productRepo;
     }
 
+    @Transactional
     @RabbitListener(queues = "${rabbitmq.queue.tutorial}")
     public void onMessage(MessageDTO messageDTO) {
         System.out.println("Receiver from RabbitMQTutorial: " + messageDTO);
@@ -37,7 +39,7 @@ public class RabbitMQConsumer {
                 int count = product.get().getQuantity() - bill.getQuantity();
                 if (count >= 0) {
                     product.get().setQuantity(count);
-                    productRepo.save(product.get());
+                    //Không cần lưu vì Hibernate đã tự động cập nhật đối tượng dựa vào productRepo.findById(bill.getProductId())
                     MessageDTO send = new MessageDTO(bill);
                     producer.sendMessage(send);
                 } else {

@@ -1,5 +1,6 @@
 package com.example.rabbitmqlisten2.service.impl;
 
+import com.example.rabbitmqlisten2.constants.BillConstants;
 import com.example.rabbitmqlisten2.constants.ResultConstants;
 import com.example.rabbitmqlisten2.domain.dto.MessageDTO;
 import com.example.rabbitmqlisten2.domain.dto.ResultDTO;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,24 +34,22 @@ public class ShipperServiceImpl implements ShipperService {
 
     @Override
     public ResultDTO shipping(ShipperRequest request) {
+        if (!BillConstants.Status.SHIPPING_SUCCESS.contains(request.getStatus())) {
+            return new ResultDTO(ResultConstants.ERRORS, ExceptionConstants.BILL_STATUS_INVALID_VI, Boolean.FALSE);
+        }
         Optional<Shipper> shipper = shipperRepo.findById(request.getShipperId());
         if (shipper.isPresent()) {
             MessageDTO messageDTO = new MessageDTO(request);
-            messageDTO.setReason(ResultConstants.SHIPPING);
-            producer.sendMessage(messageDTO);
-            return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.SHIPPING, Boolean.TRUE);
-        } else
-        return new ResultDTO(ResultConstants.ERRORS, ExceptionConstants.SHIPPER_NOT_EXIST_VI, Boolean.FALSE);
-    }
+            if (request.getStatus().equals(BillConstants.Status.SHIPPING)) {
+                messageDTO.setReason(BillConstants.Status.SHIPPING);
+                producer.sendMessage(messageDTO);
+                return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.SHIPPING, Boolean.TRUE);
+            } else {
+                messageDTO.setReason(BillConstants.Status.SUCCESS);
+                producer.sendMessage(messageDTO);
+                return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.SHIPPING_SUCCESS, Boolean.TRUE);
 
-    @Override
-    public ResultDTO shippingSuccess(ShipperRequest request) {
-        Optional<Shipper> shipper = shipperRepo.findById(request.getShipperId());
-        if (shipper.isPresent()) {
-            MessageDTO messageDTO = new MessageDTO(request);
-            messageDTO.setReason(ResultConstants.SHIPPING_SUCCESS);
-            producer.sendMessage(messageDTO);
-            return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.SHIPPING_SUCCESS, Boolean.TRUE);
+            }
         } else
         return new ResultDTO(ResultConstants.ERRORS, ExceptionConstants.SHIPPER_NOT_EXIST_VI, Boolean.FALSE);
     }
@@ -65,5 +65,4 @@ public class ShipperServiceImpl implements ShipperService {
                 ExceptionConstants.SHIPPER_NOT_EXIST
         );
     }
-
 }
