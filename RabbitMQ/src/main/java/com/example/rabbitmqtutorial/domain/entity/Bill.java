@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serializable;
+
 @DynamicUpdate
 @Entity
 @Data
 @Table(name = "bill")
-public class Bill {
+public class Bill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

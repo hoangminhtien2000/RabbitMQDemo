@@ -27,8 +27,14 @@ public class CustomerResource {
     }
 
     @PostMapping("/rabbitmq-tutorial/create-bill")
-    public ResponseEntity<ResultDTO> send(@RequestBody BillRequest request) {
-        ResultDTO resultDTO = billService.save(request);
+    public ResponseEntity<ResultDTO> createBill(@RequestBody BillRequest request) {
+        ResultDTO resultDTO = billService.createBill(request);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/rabbitmq-tutorial/update")
+    public ResponseEntity<ResultDTO> update(@RequestBody BillRequest request) {
+        ResultDTO resultDTO = billService.update(request);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
