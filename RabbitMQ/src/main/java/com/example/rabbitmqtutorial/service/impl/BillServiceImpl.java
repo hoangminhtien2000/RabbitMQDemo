@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.SerializationUtils;
 
 import java.util.Optional;
 
@@ -39,20 +38,17 @@ public class BillServiceImpl implements BillService {
         Bill response = billRepo.save(bill);
         MessageDTO messageDTO = new MessageDTO(response);
         producer.sendMessage(messageDTO);
-        return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.BILL_SUCCESS, Boolean.TRUE);
+        return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.BILL_SUCCESS, Boolean.TRUE, bill);
     }
 
     @Override
     public ResultDTO update(BillRequest request) {
         Optional<Bill> response = billRepo.findById(request.getId());
-        Bill bill = null;
         if (response.isPresent()) {
-            //Sử dụng Deep Coppy để ngăn chặn tự động cập nhật "Dirty Checking" của Hibernate.
-            bill = SerializationUtils.clone(response.get());
             if (request.getCode() != null) {
-                bill.setCode(request.getCode());
+                response.get().setCode(request.getCode());
             }
         }
-        return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.BILL_SUCCESS, Boolean.TRUE, bill);
+        return new ResultDTO(ResultConstants.SUCCESS, ResultConstants.BILL_SUCCESS, Boolean.TRUE, response.get());
     }
 }

@@ -6,6 +6,7 @@ import com.example.rabbitmqtutorial.domain.dto.MessageDTO;
 import com.example.rabbitmqtutorial.domain.entity.Bill;
 import com.example.rabbitmqtutorial.repository.BillRepo;
 import com.example.rabbitmqtutorial.util.Converter;
+import jakarta.transaction.Transactional;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class RabbitMQConsumer {
         billRepo.delete(bill);
     }
 
+    @Transactional
     @RabbitListener(queues = "${rabbitmq.queue.listen2}")
     public void onMessageListen2(MessageDTO messageDTO) {
         System.out.println("Receiver message from RabbitMQListen2: " + messageDTO);
@@ -44,14 +46,13 @@ public class RabbitMQConsumer {
         Optional<Bill> response = billRepo.findById(bill.getId());
         if (response.isPresent()) {
             response.get().setShipperId(bill.getShipperId());
-            String status = response.get().getStatus();
-            if (status.equals(BillConstants.Status.PENDING)) {
+            if (messageDTO.getReason().equals(BillConstants.Status.SHIPPING)) {
                 response.get().setStatus(BillConstants.Status.SHIPPING);
             }
-            if (status.equals(BillConstants.Status.SHIPPING)) {
+            if (messageDTO.getReason().equals(BillConstants.Status.SUCCESS)) {
                 response.get().setStatus(BillConstants.Status.SUCCESS);
             }
-            billRepo.save(response.get());
+        //Không cần lưu vì Hibernate đã tự động cập nhật đối tượng dựa vào billRepo.findById(bill.getId())
         }else System.out.printf("Đơn hàng có 'id': %d không tồn tại\n", bill.getId());
 
     }
