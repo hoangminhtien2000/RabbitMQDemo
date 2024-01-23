@@ -1,4 +1,4 @@
-package com.example.rabbitmqlisten.domain.entity.errors;
+package com.example.rabbitmqlisten.domain.errors;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

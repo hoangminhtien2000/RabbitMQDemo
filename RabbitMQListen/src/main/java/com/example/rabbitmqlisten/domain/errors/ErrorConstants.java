@@ -1,4 +1,4 @@
-package com.example.rabbitmqlisten.domain.entity.errors;
+package com.example.rabbitmqlisten.domain.errors;
 
 import java.net.URI;
 

@@ -3,7 +3,7 @@ package com.example.rabbitmqlisten.consumer;
 import com.example.rabbitmqlisten.domain.dto.BillDTO;
 import com.example.rabbitmqlisten.domain.entity.Product;
 import com.example.rabbitmqlisten.domain.dto.MessageDTO;
-import com.example.rabbitmqlisten.domain.entity.errors.ExceptionConstants;
+import com.example.rabbitmqlisten.domain.errors.ExceptionConstants;
 import com.example.rabbitmqlisten.publisher.RabbitMQProducer;
 import com.example.rabbitmqlisten.repository.ProductRepo;
 import com.example.rabbitmqlisten.util.Converter;
