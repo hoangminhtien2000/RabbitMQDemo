@@ -1,0 +1,29 @@
+1.Mở Docker
+
+2.Chạy trên cmd:
+B1: Dowload RabbitMQ Server(Nếu Docker chưa có Images của RabbitMQ Server)
+docker pull rabbitmq:3.12.10-management
+
+B2: Chạy docker(khi tắt thì tự động xoá)
+docker run --rm -it -p 15672:15672 -p 5672:5672 rabbitmq:3.12.10-management
+
+3.Đăng nhập vào RabbitMQ Management
+Link: http://localhost:15672	TàiKhoản:guest/guest
+
+4.Run 3 dự Project và mở Postman lên để call API
+B1: Tạo bill
+http://localhost:8080/api/rabbitmq-tutorial/create-bill
+{
+    "code": "015",
+    "productId": 1,
+    "quantity": 5,
+    "address": "Đà Nẵng"
+}
+B2:Giao hàng
+http://localhost:8082/api/rabbitmq-listen2/shipping
+{
+    "id": 35,
+    "shipperId": 1,
+    "status":"SUCCESS"
+}
+
